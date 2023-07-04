@@ -14,9 +14,64 @@ import EventMenuScreen from "../../../view/Event/EventMenuScreen";
 import { AntDesign, MaterialCommunityIcons, FontAwesome, Ionicons, Fontisto } from "@expo/vector-icons";
 import ChatMenuScreen from "../../../view/Chat/ChatMenuScreen";
 import ChatContentScreen from "../../../view/Chat/ChatContentScreen";
+import AddContentScreen from "../../../view/News/AddContentScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab =  createMaterialBottomTabNavigator();
+
+function EventTab(){
+  return (
+    <Stack.Navigator
+      initialRouteName="news-menu"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen
+        name="news-menu"
+        component={EventMenuScreen}
+        options={{
+          headerRight: () => (
+            <Button
+              onPress={() => alert('This is a button!')}
+              title="Info"
+              color="#fff"
+            />
+          ),
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function SpecialTab(){
+  return (
+    <Stack.Navigator
+      initialRouteName="news-menu"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen
+        name="news-menu"
+        component={NewsMenuScreen}
+        options={{
+          tabBarLabel: <Text style={{ textAlign : "center", color: "white", fontSize:10.5}}>Fil d'actualité</Text>,
+          tabBarIcon: ({ color }) => (
+            <Fontisto name="world-o" size={24} color={color} />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="addContent"
+        component={AddContentScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 function MyTabs() {
   return (
@@ -54,9 +109,10 @@ function MyTabs() {
           ),
         }}
       />
+      
       <Tab.Screen
         name="news-menu"
-        component={NewsMenuScreen}
+        component={SpecialTab}
         options={{
           tabBarLabel: <Text style={{ textAlign : "center", color: "white", fontSize:10.5}}>Fil d'actualité</Text>,
           tabBarIcon: ({ color }) => (
@@ -71,6 +127,13 @@ function MyTabs() {
           tabBarLabel: <Text style={{ textAlign : "center", color: "white", fontSize:10.5}}>Calendrier</Text>,
           tabBarIcon: ({ color }) => (
             <AntDesign name="calendar" color={color} size={22} />
+          ),
+          headerRight: () => (
+            <Button
+              onPress={() => alert('This is a button!')}
+              title="Info"
+              color="#fff"
+            />
           ),
         }}
       />

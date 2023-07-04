@@ -19,7 +19,7 @@ import * as Permissions from "expo-permissions";
 import { useNavigation } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore";
 import database from "@react-native-firebase/database";
-import auth from "@react-native-firebase/auth"
+import auth from "@react-native-firebase/auth";
 import {
   renderInputToolbar,
   renderActions,
@@ -45,20 +45,21 @@ const ChatContentScreen = () => {
 
   const [messages, setMessages] = useState([]);
 
-  useLayoutEffect(() => {
-    console.log(auth().currentUser.uid)
-    firestore()
-  .collection('users')
-  .doc(auth().currentUser.uid)
-  .get()
-  .then(documentSnapshot => {
-    console.log('User exists: ', documentSnapshot.exists);
+  
 
-    if (documentSnapshot.exists) {
-      console.log('User data: ', documentSnapshot.data());
-    }
-  });
-  });
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .onSnapshot(documentSnapshot => {
+        console.log('User data: ', documentSnapshot.data());
+        
+      });
+
+    // Stop listening for updates when no longer required
+    return () => subscriber();
+  }, []);
+
 
   useEffect(() => {
     setMessages([
@@ -81,21 +82,6 @@ const ChatContentScreen = () => {
     );
   }, []);
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
 
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {
