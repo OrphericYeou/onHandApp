@@ -17,6 +17,7 @@ interface State {
   dateBirth?: Date;
   show?: boolean;
   text?: string;
+  content?:any
 }
 
 export default class EventMenuScreen extends Component<State> {
@@ -26,8 +27,23 @@ export default class EventMenuScreen extends Component<State> {
     show: false,
     date: new Date(),
     dateBirth: new Date(),
-    text:""
+    text:"",
+    content: []
   };
+
+  componentDidMount() {
+    const dbRef = firestore().collection('events').get()
+    .then(querySnapshot => {
+      console.log('Total users: ', querySnapshot.size);
+  
+      querySnapshot.forEach(documentSnapshot => {
+        console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
+        this.setState({
+          content: [...this.state.content, documentSnapshot.data()]
+        })
+      });
+    });
+}
 
   // reservationsKeyExtractor = (item, index) => {
   //   return `${item?.reservation?.day}${index}`;
@@ -40,7 +56,10 @@ export default class EventMenuScreen extends Component<State> {
       date: this.state.date
     })
     .then( response => {
-      console.log(response.status)
+      this.setState({ text: '', date: new Date, show: false, visible: false });
+      Alert.alert('Success', 'Votre evenement a ete ajouté à votre calendrier !', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
     })
     .catch((error) => {
       console.log(error);
@@ -159,7 +178,7 @@ export default class EventMenuScreen extends Component<State> {
         />
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#022537" }}
-              onPress={() => this.onSend}
+              onPress={() => this.onSend()}
             >
               <Text style={{ ...styles.textStyle }}>Valider</Text>
             </TouchableHighlight>
@@ -191,7 +210,7 @@ export default class EventMenuScreen extends Component<State> {
       for (let i = 0; i < 30; i++) {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
         const strTime = this.timeToString(time);
-        console.log(time);
+        //console.log(time);
         if (!items[strTime]) {
           items[strTime] = [];
 

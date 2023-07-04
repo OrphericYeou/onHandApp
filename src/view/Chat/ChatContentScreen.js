@@ -45,31 +45,34 @@ const ChatContentScreen = () => {
 
   const [messages, setMessages] = useState([]);
 
-  
-
   useEffect(() => {
     const subscriber = firestore()
-      .collection('users')
+      .collection("users")
       .doc(auth().currentUser.uid)
-      .onSnapshot(documentSnapshot => {
-        console.log('User data: ', documentSnapshot.data());
-        
+      .onSnapshot((documentSnapshot) => {
+        console.log("User data: ", documentSnapshot.data());
       });
 
     // Stop listening for updates when no longer required
     return () => subscriber();
   }, []);
 
+  const dateActuelle = new Date();
+  // Définir la date sur demain
+  dateActuelle.setDate(dateActuelle.getDate() + 1);
+
+  // Définir l'heure sur 9:17
+  dateActuelle.setHours(9, 17, 0, 0);
 
   useEffect(() => {
     setMessages([
       {
         _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
+        text: "Bonjour mon fils",
+        createdAt: dateActuelle,
         user: {
           _id: 2,
-          name: "React Native",
+          name: "Gabriel",
           avatar: "https://placeimg.com/140/140/any",
         },
       },
@@ -81,7 +84,6 @@ const ChatContentScreen = () => {
       GiftedChat.append(previousMessages, messages)
     );
   }, []);
-
 
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {

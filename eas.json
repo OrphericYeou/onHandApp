@@ -1,25 +1,24 @@
 {
-  "builds": {
-    "android": {
-      "release": {
-        "workflow": "generic",
-        "gradleCommand": ":app:bundleRelease"
-      },
-      "development": {
-        "workflow": "generic",
-        "distribution": "internal",
-        "gradleCommand": ":app:assembleDebug"
+  "cli": {
+    "version": ">= 3.15.0"
+  },
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
       }
     },
-    "ios": {
-      "release": {
-        "workflow": "generic"
-      },
-      "development": {
-        "workflow": "generic",
-        "distribution": "internal",
-        "schemeBuildConfiguration": "Debug"
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
       }
-    }
+    },
+    "preview3": {
+      "developmentClient": true
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
   }
 }

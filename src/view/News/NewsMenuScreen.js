@@ -25,6 +25,7 @@ import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import firestore from '@react-native-firebase/firestore';
+import storage, {firebase} from '@react-native-firebase/storage';
 
 
 const NewsMenuScreen = (props) => {
@@ -36,25 +37,49 @@ const NewsMenuScreen = (props) => {
   const [ todo, setTodos ] = useState('');
   const [loading, setLoading] = useState(false);
   
+  const getUrl = async (id) => {
+    try {
+      const url = await firebase.app().storage("gs://onhand-60c06.appspot.com/").ref(id).getDownloadURL();
+      console.log("id: " + id);
+      return url;
+    } catch (error) {
+      console.log(error);
+      console.log("id: " + id);
+      console.log("id: " + "gs://onhand-60c06.appspot.com/Nde22pymPsj7j09sZAwR");
+      return null;
+    }
+  };
+  
   useEffect(() => {
-    return ref.onSnapshot((querySnapshot) => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        const {id, desc, content, date, name } = doc.data();
-        list.push({
-          id: doc.id,
-          name,
-          content,
-          date,
-        });
+    setInterval(() => {
+      return ref.onSnapshot((querySnapshot) => {
+        const fetchData = async () => {
+          const list = [];
+          for (const doc of querySnapshot.docs) {
+            const { id, desc, content, date, name } = doc.data();
+            try {
+              let url = await getUrl(doc.id);
+              list.push({
+                id: doc.id,
+                name,
+                content,
+                date,
+                url,
+              });
+            } catch (error) {
+              console.log(error);
+            }
+          }
+          setTodos(list);
+          console.log( list);
+          if (loading) {
+            setLoading(false);
+          }
+        };
+        fetchData();
       });
-
-      setTodos(list);
-      console.log(todo);
-      if (loading) {
-        setLoading(false);
-      }
-    });
+    }, 4000)
+   
   }, []);
 
   const getPermissionAsync = async () => {
@@ -251,21 +276,28 @@ const NewsMenuScreen = (props) => {
                       marginTop: 15,
                     }}
                   >
-                    Lorem ipsum ndolor
+                    {item.content}
                   </Text>
+
                 </View>
-                <View
+                 <View
                   style={{
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
                     marginTop: 20,
                     flexDirection: "column",
+                    marginLeft:'-7%',
                     width: "80%",
                     alignSelf: "center",
                   }}
                 >
-                  
+                  <Image
+                    style={styles.video}
+                    source={{
+                      uri: item.url,
+                    }}
+                  />
                   <View
                     style={{
                       flexDirection: "row",
@@ -446,174 +478,6 @@ const NewsMenuScreen = (props) => {
                       }
                     />
                   </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      width: "100%",
-                      marginTop: 15,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Montserrat-s-bold",
-                        color: "gray",
-                        fontSize: 13,
-                      }}
-                    >
-                      1 J'aime
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "Montserrat-s-bold",
-                        color: "gray",
-                        fontSize: 13,
-                      }}
-                    >
-                      1 Commentaire
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: "#1f9ebc",
-                width: "100%",
-                padding: 5,
-                flexDirection: "row",
-                justifyContent: "space-around",
-                paddingVertical: 11,
-                borderRadius: 5,
-                borderTopLeftRadius: 0,
-                borderTopRightRadius: 0,
-              }}
-            >
-              <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
-              >
-                <AntDesign name="like2" size={15} color="white" />
-                <Text
-                  style={{
-                    color: "white",
-                    fontFamily: "Montserrat",
-                    marginLeft: 5,
-                  }}
-                >
-                  J'aime
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
-              >
-                <MaterialCommunityIcons
-                  name="comment-text-outline"
-                  size={15}
-                  color="white"
-                />
-                <Text
-                  style={{
-                    color: "white",
-                    fontFamily: "Montserrat",
-                    marginLeft: 5,
-                  }}
-                >
-                  Commenter
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
-              >
-                <EvilIcons name="share-google" size={15} color="white" />
-                <Text
-                  style={{
-                    color: "white",
-                    fontFamily: "Montserrat",
-                    marginLeft: 5,
-                  }}
-                >
-                  Partager
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View
-            style={{
-              marginHorizontal: "7%",
-              //alignItems: "flex-start",
-            }}
-          >
-            <View
-              style={{
-                marginTop: 20,
-                paddingLeft: 20,
-                paddingTop: 15,
-                paddingBottom: 20,
-                backgroundColor: "#ffffff",
-                borderTopLeftRadius: 5,
-                borderTopRightRadius: 5,
-              }}
-            >
-              <View style={{ flexDirection: "row" }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    marginRight: 10,
-                  }}
-                >
-                  <Image
-                    style={{ width: 50, height: 50, borderRadius: 50 }}
-                    source={{
-                      uri: "https://reactnative.dev/img/tiny_logo.png",
-                    }}
-                  />
-                </View>
-                <View style={{ flex: 5, flexDirection: "column" }}>
-                  <Text style={{ fontFamily: "Montserrat-s-bold" }}>
-                    Prenom Nom
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: "Montserrat-i",
-                      fontSize: 12,
-                      marginTop: 1,
-                      marginLeft: 1,
-                    }}
-                  >
-                    Le 15/02/2023
-                  </Text>
-                </View>
-              </View>
-              <View>
-                <View>
-                  <Text
-                    style={{
-                      fontFamily: "Montserrat",
-                      fontSize: 13,
-                      marginTop: 15,
-                    }}
-                  >
-                    Lorem ipsum ndolor
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginTop: 20,
-                    flexDirection: "column",
-                    width: "80%",
-                    alignSelf: "center",
-                  }}
-                >
-                  <Image
-                    style={{ width: 50, height: 50, borderRadius: 0 }}
-                    source={{
-                      uri: "https://reactnative.dev/img/tiny_logo.png",
-                    }}
-                  />
                   <View
                     style={{
                       flexDirection: "row",

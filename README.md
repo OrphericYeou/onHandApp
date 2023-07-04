@@ -38,3 +38,5 @@ To build the app with the dev client, just run `eas build --profile with-dev-cli
 
 - [Development Client docs](https://docs.expo.dev/clients/introduction/)
 # onHandApp
+🤖 Android app:
+https://expo.dev/artifacts/eas/fscWgCX499pX9SUBE8L7Zp.aab

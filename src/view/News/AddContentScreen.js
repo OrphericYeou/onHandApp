@@ -6,6 +6,7 @@ import {
   ScrollView,
   TextInput,
   Image,
+  Alert
 } from "react-native";
 import React, { useState } from "react";
 import styles from "../../style";
@@ -56,8 +57,16 @@ const AddContentScreen = ({ props, route, navigation }) => {
           .then( response => {
             storage()
             .ref(response.id)
-            .putFile(uploadUri);
-          });
+            .putFile(uploadUri)
+            .then( (response) => {
+                Alert.alert('Success', 'Votre poste a bien ete ajouté au mur !', [
+                    {text: 'OK', onPress: () => navigation.navigate("news-menu")},
+                  ]);                               
+            })
+            .catch((error) => {
+                console.log(error);
+              });
+          })
       })
       .catch((error) => {
         console.log(error);

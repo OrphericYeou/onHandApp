@@ -88,7 +88,7 @@ export default function GameMenuScreen(props) {
               >
                 <View style={{ alignItems: "center" }}>
                   <Image
-                    style={{ width: 50, height: 50 }}
+                    style={{ width: 110, height: 110 }}
                     source={{
                       uri: "https://img.freepik.com/free-vector/joystick-game-sport-technology_138676-2045.jpg?w=2000",
                     }}
@@ -106,7 +106,7 @@ export default function GameMenuScreen(props) {
             >
               <View style={{ alignItems:"center" }}>
                 <Image
-                  style={{ width: 50, height: 50 }}
+                  style={{ width: 110, height: 110 }}
                   source={{
                     uri: "https://img.freepik.com/free-vector/joystick-game-sport-technology_138676-2045.jpg?w=2000",
                   }}

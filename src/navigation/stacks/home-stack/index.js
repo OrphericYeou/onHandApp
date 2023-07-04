@@ -19,31 +19,6 @@ import AddContentScreen from "../../../view/News/AddContentScreen";
 const Stack = createNativeStackNavigator();
 const Tab =  createMaterialBottomTabNavigator();
 
-function EventTab(){
-  return (
-    <Stack.Navigator
-      initialRouteName="news-menu"
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen
-        name="news-menu"
-        component={EventMenuScreen}
-        options={{
-          headerRight: () => (
-            <Button
-              onPress={() => alert('This is a button!')}
-              title="Info"
-              color="#fff"
-            />
-          ),
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
 function SpecialTab(){
   return (
     <Stack.Navigator

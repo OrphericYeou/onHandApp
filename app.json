@@ -5,9 +5,9 @@
     "scheme": "onhand",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo_onhand-fleur.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo_onhand-fleur.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -35,7 +35,11 @@
     "plugins": [
       "@react-native-firebase/app",
       "@react-native-firebase/app"
-
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8ad9526a-233e-40f3-b3b3-0ef0b1d3ab2c"
+      }
+    }
   }
 }
