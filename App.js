@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Stacks from "./src/navigation"
 import Stack from './src/navigation/';
-import { Provider } from 'react-redux';
+import { Provider } from 'react-redux'; 
 import { store } from './src/store/store';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
